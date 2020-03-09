@@ -1,4 +1,4 @@
- // Variables
+// Variables
 var playerHeight = 80
 var playerWidth = 15
 var playerSpeed = 8
@@ -139,7 +139,7 @@ function draw() {
   }
   
   // playerR scores!
-  if (ballX < 0) {
+  if (ballX > width) {
     ballX = width/2
     ballY = height/2
     scoreR = scoreR + 1
