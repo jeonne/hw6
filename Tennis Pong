@@ -1,0 +1,148 @@
+ // Variables
+var playerHeight = 80
+var playerWidth = 15
+var playerSpeed = 8
+var playerL = 165
+var playerR = 165
+var screen = 0
+
+var scoreL = 0
+var scoreR = 0
+
+var ballX = 265
+var ballY = 165
+var ballSize = 20
+var ballXSpeed = 5
+var ballYSpeed = -3
+
+function preload() {
+  soundFormats("wav");
+  pong = loadSound("Ping Pong Sound.wav");  
+}
+  
+function setup() {
+  createCanvas(600, 400);
+}
+
+
+function draw() {
+  background(61, 117, 76);
+  
+  // Score text
+  fill (255,255,255)
+  textSize(50);
+  text(scoreL, 50, 60);
+  text(scoreR, width-90, 60);
+  
+  // rectangle 
+  noFill();
+  stroke(255,255,255);
+  rect(225,100,150,200);
+  
+  // draw left player
+  fill(255,255,255);
+  rect(0, playerL, playerWidth, playerHeight, 10);
+  
+  // draw right player
+  fill(255,255,255);
+  rect(width-playerWidth, playerR, playerWidth, playerHeight, 10);
+
+  
+  // draw ball
+  ellipse(ballX, ballY, ballSize)
+  fill (0);
+  
+  // center line
+  stroke(255,255,255);
+  strokeWeight(2);
+  line(300,0,300,400);
+  
+  // court line left
+  stroke(255,255,255);
+  strokeWeight(2);
+  line(0,200,225,200);
+  
+   // court line right
+  stroke(255,255,255);
+  strokeWeight(2);
+  line(1000,200,375,200);
+
+
+ /* User Input */
+  // 'W' key
+  if (keyIsDown(87)) {
+    playerL = playerL - playerSpeed
+  }
+  // 'S' key
+  if (keyIsDown(83)) {
+    playerL = playerL + playerSpeed
+  }
+  
+  if (keyIsDown(UP_ARROW)) {
+    playerR = playerR - playerSpeed
+  }
+  if (keyIsDown(DOWN_ARROW)) {
+    playerR = playerR + playerSpeed
+  }
+  
+  /* Game logic */
+  if (playerL <= 0) {
+    playerL = 0;
+  }
+  if (playerL > height - playerHeight) {
+    playerL = height - playerHeight;
+  }
+  
+  if (playerR <= 0) {
+    playerR = 0;
+  }
+  if (playerR > height - playerHeight) {
+    playerR = height - playerHeight;
+  }
+  
+  ballX = ballX + ballXSpeed
+  ballY = ballY + ballYSpeed
+  
+  // Bounce off top wall
+  if (ballY < 0) {
+    ballY = 0;
+    ballYSpeed = -ballYSpeed;
+  }
+
+  // Bounce off bottom wall
+  if (ballY > height) {
+    ballY = height;
+    ballYSpeed = -ballYSpeed;
+  }
+  
+  
+  // bounce off playerR
+  if (ballX > width - playerWidth && ballY >= playerR && ballY <= playerR + playerHeight) {
+    ballX = width - playerWidth - 40
+    ballXSpeed = -ballXSpeed
+    pong.play();
+  }
+  
+  // bounce off playerL
+  if (ballX < 0 + playerWidth && ballY >= playerL && ballY <= playerL + playerHeight) {
+    ballX = 0 + playerWidth + 40
+    ballXSpeed = -ballXSpeed
+    pong.play();
+  }
+  
+  // playerL scores!
+  if (ballX > width) {
+    ballX = width/2
+    ballY = height/2
+    scoreL = scoreL + 1
+    ballXSpeed = - ballXSpeed 
+  }
+  
+  // playerR scores!
+  if (ballX < 0) {
+    ballX = width/2
+    ballY = height/2
+    scoreR = scoreR + 1
+    ballXSpeed = - ballXSpeed 
+  }
+}
